@@ -7,7 +7,11 @@ using MimeKit;
 using Castle.Core.Smtp;
 using testtask.Models;
 using Habanero.Util;
+using System.Net.Mail;
+using System.Net;
+using System.ComponentModel.DataAnnotations;
 
+using System.Threading.Tasks;
 
 namespace Task.Controllers
 {
@@ -21,7 +25,7 @@ namespace Task.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            await emailSender.SendEmailAsync("ahmad@gmail.com", "subject", "message");
+            await emailSender.SendEmailAsync("shimaahakeem1998@gmail.com", "subject", "message");
 
             return View();
         }
@@ -56,7 +60,7 @@ namespace Task.Controllers
                 var message = $"Name: {userDTO.name}\nPhone: {userDTO.phone}\nEmail: {userDTO.email}\nService: {selectedService}\nInterest: {selectedInterest}";
 
                 
-                emailSender.SendEmailAsync("shimaahakeem1998@gmail.com", subject, message);
+                emailSender.SendEmailAsync(userDTO.email, subject, message);
 
 
 
