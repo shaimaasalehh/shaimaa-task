@@ -1,0 +1,144 @@
+﻿@model VMuser
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" type="text/css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnSend").click(function () {
+                var obj = {
+                    'name': $("#name").val(),
+                    'phone': $("#phone").val(),
+                    'email': $("#email").val(),
+                    serviceName: $("#selectedService").text(),
+                    interestName: $("#selectedInterest").text()
+                };
+
+                $.ajax({
+                    type: 'post',
+                    url: '/user/save',
+                    data: obj,
+                    success: function () {
+                        $("#exampleModal").modal('show');
+
+                        $.ajax({
+                            type: 'get',
+                            url: '/user/GetServices',
+                            success: function (data) {
+                                $("#services").empty(); 
+
+                                for (var i = 0; i < data.length; i++) {
+                                    $("#services").append('<button type="button" class="btn btn-primary me-4 ">' + data[i] + '</button>');
+                                }
+
+                                $("#exampleModal").modal('show');
+                            }
+                        });
+                    }
+                });
+            });
+
+            $("#btn2").click(function () {
+                $("#exampleModal1").modal('show');
+
+                $.ajax({
+                    type: 'get',
+                    url: '/user/Gettime',
+                    success: function (data1) {
+                        $("#interested").empty();
+
+                        for (var j = 0; j < data1.length; j++) {
+                            $("#interested").append('<button type="button" class="btn btn-primary me-4 ">' + data1[j] + '</button>');
+                        }
+
+                        $("#exampleModal1").modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</head>
+<body>
+
+<div class="row">
+<div class="col-7">
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Name</label>
+    <input type="text" class="form-control" id="name" placeholder="username">
+</div>
+</div>
+    <div class="col-7">
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Phone</label>
+    <input type="text" class="form-control" id="phone" placeholder="your phone number">
+</div>
+</div>
+        <div class="col-7">
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+</div>
+</div>
+<div class="col-6">
+
+
+                <button type="button" class="btn btn-primary" id="btnSend" asp-action="save">Send</button>
+    </div>
+</div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Please select the service that you are interested in </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div  id="services">
+                        <span id="selectedService"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btn2">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">When do you want to make the order ?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="display:flex" id="interested">
+                        <span id="selectedInterest"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
